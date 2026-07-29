@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checklist - Chefe de Cozinha | NutriSaúde</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', Arial, sans-serif; background: #eef4ee; hcolor: #2d2d2d; padding: 16px; min-height: 100vh; }
+.container { max-width: 820px; margin: 0 auto; background: #fff; border-radius: 14px; box-shadow: 0 4px 24px rgba(0,0,0,0.10); overflow: hidden; }
+/* ── HEADER ── */
+.header { background: linear-gradient(135deg, #1b5e20, #2e7d32); color: white; padding: 20px 28px; display: flex; align-items: center; gap: 16px; }
+.header-logo { height: 56px; width: auto; filter: brightness(0) invert(1); flex-shrink: 0; }
+.header-divider { width: 1px; height: 44px; background: rgba(255,255,255,0.3); flex-shrink: 0; }
+.header-text h1 { font-size: 18px; font-weight: 700; letter-spacing: .3px; }
+.header-text p { font-size: 12px; opacity: .80; margin-top: 3px; }
+.form-body { padding: 28px 28px 36px; }
+.required-note { font-size: 12px; color: #999; margin-bottom: 22px; }
+/* ── SECTIONS ── */
+.section { margin-bottom: 28px; }
+.section-title { font-size: 11px; font-weight: 700; letter-spacing: .8px; text-transform: uppercase; color: #2e7d32; border-bottom: 2px solid #c8e6c9; padding-bottom: 6px; margin-bottom: 16px; }
+/* ── GRID ── */
+.grid-1 { display: grid; gap: 12px; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.grid-3 { display: grid; grid-template-columns: 1fr auto 1fr; gap: 8px; align-items: end; }
+@media(max-width:600px) { .grid-2 { grid-template-columns: 1fr; } .grid-3 { grid-template-columns: 1fr; } }
+/* ── FIELDS ── */
+.field { display: flex; flex-direction: column; gap: 5px; }
+.field label { font-size: 11px; font-weight: 700; letter-spacing: .3px; text-transform: uppercase; color: #666; }
+.date-sep { font-size: 13px; color: #aaa; padding-bottom: 12px; text-align: center; font-weight: 600; }
+input[type="text"], input[type="date"], textarea, select {
+  padding: 10px 13px; border: 1.5px solid #ddd; border-radius: 8px; font-size: 14px;
+  font-family: inherit; transition: border-color .2s; width: 100%; background: #fafafa;
+}
+input:focus, textarea:focus, select:focus { outline: none; border-color: #43a047; box-shadow: 0 0 0 3px rgba(67,160,71,.12); background: #fff; }
+.radio-group { display: flex; gap: 18px; align-items: center; padding: 8px 0; flex-wrap: wrap; }
+.radio-label { display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 500; color: #333; cursor: pointer; text-transform: none; }
+.radio-label input[type="radio"] { width: 17px; height: 17px; accent-color: #2e7d32; }
+/* ── TURNO PILLS ── */
+.turno-group { display: flex; gap: 10px; padding: 6px 0; flex-wrap: wrap; }
+.turno-label { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; cursor: pointer; padding: 8px 18px; border: 2px solid #ddd; border-radius: 50px; transition: all .18s; color: #555; background: #fafafa; }
+.turno-label:has(input:checked) { border-color: #2e7d32; background: #e8f5e9; color: #1b5e20; }
+.turno-label input[type="radio"] { display: none; }
+.turno-emoji { font-size: 16px; }
+/* ── QUESTÕES ── */
+.questions-table { width: 100%; border-collapse: collapse; font-size: 14px; border-radius: 10px; overflow: hidden; box-shadow: 0 1px 6px rgba(0,0,0,.07); }
+.questions-table thead { background: #2e7d32; color: white; }
+.questions-table th { padding: 11px 14px; font-size: 11px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; }
+.questions-table th:first-child { text-align: left; }
+.questions-table th:nth-child(2), .questions-table th:nth-child(3) { text-align: center; }
+.questions-table tbody tr:nth-child(even) { background: #f1f8e9; }
+.questions-table tbody tr:hover { background: #e8f5e9; }
+.questions-table td { padding: 10px 14px; border-bottom: 1px solid #e8e8e8; vertical-align: middle; }
+.q-cell { display: flex; align-items: center; gap: 9px; }
+.q-num { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; background: #2e7d32; color: white; border-radius: 50%; font-size: 11px; font-weight: 700; flex-shrink: 0; }
+.sim-nao { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+.sim-nao label { display: flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 600; cursor: pointer; text-transform: none; color: #333; padding: 4px 9px; border: 1.5px solid #ccc; border-radius: 20px; transition: all .15s; }
+.sim-nao label:has(input:checked) { border-color: #2e7d32; background: #e8f5e9; color: #1b5e20; }
+.sim-nao input[type="radio"] { accent-color: #2e7d32; width: 13px; height: 13px; }
+.obs-input { font-size: 13px; padding: 7px 10px; border-radius: 7px; border: 1.5px solid #e0e0e0; background: #fafafa; width: 100%; }
+.obs-input:focus { border-color: #43a047; outline: none; }
+@media(max-width:620px) {
+  .questions-table thead { display: none; }
+  .questions-table, .questions-table tbody, .questions-table tr, .questions-table td { display: block; width: 100%; }
+  .questions-table tr { border: 1.5px solid #ddd; border-radius: 10px; margin-bottom: 10px; padding: 12px; background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+  .questions-table tr:nth-child(even) { background: #f9fbe7; }
+  .questions-table td { border: none; padding: 4px 0; }
+  .sim-nao { justify-content: flex-start; }
+}
+/* ── RELATORIO GERAL ── */
+.audio-section { background: #f1f8e9; border: 2px solid #a5d6a7; border-radius: 12px; padding: 22px; margin-bottom: 28px; }
+.audio-section h3 { color: #2e7d32; font-size: 16px; margin-bottom: 4px; }
+.audio-section .subtitle { color: #666; font-size: 13px; margin-bottom: 16px; }
+.mic-row { display: flex; align-items: center; gap: 14px; margin-bottom: 10px; flex-wrap: wrap; }
+#micBtn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 22px; border: none; border-radius: 50px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all .2s; background: #2e7d32; color: white; box-shadow: 0 2px 8px rgba(46,125,50,.25); }
+#micBtn:hover { background: #1b5e20; }
+#micBtn.recording { background: #c62828; animation: pulsebtn 1.4s infinite; }
+@keyframes pulsebtn { 0%,100% { transform: scale(1); } 50% { transform: scale(1.04); } }
+.rec-indicator { display: none; align-items: center; gap: 7px; font-size: 13px; font-weight: 600; color: #c62828; }
+.rec-dot { width: 10px; height: 10px; background: #c62828; border-radius: 50%; animation: pulsedot 1s infinite; }
+@keyframes pulsedot { 0%,100% { opacity:1; } 50% { opacity:.3; } }
+#interimBox { min-height: 20px; font-size: 13px; color: #888; font-style: italic; padding: 4px 0; margin-bottom: 8px; }
+#relatorioText { min-height: 140px; resize: vertical; background: #fff; }
+.mic-tip { font-size: 11px; color: #888; margin-top: 8px; }
+/* ── FOTOS ── */
+.foto-section { background: #fff8e1; border: 2px solid #ffe082; border-radius: 12px; padding: 22px; margin-bottom: 28px; }
+.foto-section h3 { color: #f57f17; font-size: 16px; margin-bottom: 4px; }
+.foto-section .subtitle { color: #666; font-size: 13px; margin-bottom: 16px; }
+.foto-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 8px; }
+.foto-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 22px; border: none; border-radius: 50px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all .2s; color: white; box-shadow: 0 2px 8px rgba(0,0,0,.15); }
+.foto-btn-galeria { background: #f57f17; }
+.foto-btn-galeria:hover { background: #e65100; }
+.foto-btn-camera { background: #1565c0; }
+.foto-btn-camera:hover { background: #0d47a1; }
+.foto-upload-hint { font-size: 12px; color: #999; margin-top: 4px; text-align: center; }
+.foto-preview { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+.foto-item { position: relative; width: 90px; height: 90px; border-radius: 8px; overflow: hidden; border: 2px solid #ffe082; box-shadow: 0 1px 4px rgba(0,0,0,.1); }
+.foto-item img { width: 100%; height: 100%; object-fit: cover; }
+.foto-remove { position: absolute; top: 3px; right: 3px; width: 20px; height: 20px; background: rgba(0,0,0,.6); color: white; border: none; border-radius: 50%; font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.foto-count { font-size: 12px; color: #888; margin-top: 8px; }
+/* ── ENVIAR ── */
+.submit-section { text-align: center; }
+#btnSubmit { width: 100%; max-width: 420px; padding: 15px; background: linear-gradient(135deg, #2e7d32, #43a047); color: white; border: none; border-radius: 50px; font-size: 16px; font-weight: 700; cursor: pointer; transition: opacity .2s; box-shadow: 0 4px 14px rgba(46,125,50,.30); }
+#btnSubmit:hover { opacity: .9; }
+#btnSubmit:disabled { opacity: .6; cursor: not-allowed; }
+.send-note { font-size: 12px; color: #aaa; margin-top: 8px; }
+/* ── SUCESSO ── */
+#successScreen { display: none; text-align: center; padding: 50px 28px; }
+#successScreen .big-check { font-size: 64px; margin-bottom: 14px; }
+#successScreen h2 { color: #2e7d32; font-size: 24px; margin-bottom: 8px; }
+#successScreen p { color: #666; font-size: 15px; margin-bottom: 24px; }
+#btnNewReport { padding: 12px 32px; background: #2e7d32; color: white; border: none; border-radius: 50px; font-size: 15px; font-weight: 600; cursor: pointer; }
+/* ── FOTO POR QUESTÃO ── */
+.fotoq-cell { display:flex; align-items:center; justify-content:center; }
+.fotoq-btn { background:none; border:1.5px dashed #a5d6a7; border-radius:8px; padding:6px 8px; cursor:pointer; font-size:18px; color:#2e7d32; transition:background .15s; }
+.fotoq-btn:hover { background:#e8f5e9; }
+.fotoq-thumb { position:relative; display:inline-block; }
+.fotoq-thumb img { width:44px; height:44px; object-fit:cover; border-radius:6px; border:2px solid #a5d6a7; display:block; }
+.fotoq-rm { position:absolute; top:-5px; right:-5px; width:16px; height:16px; background:#e53935; color:white; border:none; border-radius:50%; font-size:10px; cursor:pointer; line-height:16px; text-align:center; padding:0; }
+@media(max-width:620px) { .fotoq-btn { padding:8px 12px; font-size:20px; } .fotoq-thumb img { width:54px; height:54px; } }
+/* ── NOTA DA UNIDADE ── */
+.nota-section { background: #f3e5f5; border: 2px solid #ce93d8; border-radius: 12px; padding: 22px; margin-bottom: 28px; }
+.nota-section h3 { color: #6a1b9a; font-size: 16px; margin-bottom: 4px; }
+.nota-section .subtitle { color: #666; font-size: 13px; margin-bottom: 16px; }
+.nota-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+.nota-btn { width: 46px; height: 46px; border: 2px solid #ce93d8; border-radius: 10px; background: #fafafa; font-size: 15px; font-weight: 700; color: #6a1b9a; cursor: pointer; transition: all .18s; display: flex; align-items: center; justify-content: center; }
+.nota-btn:hover { background: #f3e5f5; border-color: #9c27b0; }
+.nota-btn.selected { background: #9c27b0; border-color: #6a1b9a; color: white; transform: scale(1.1); box-shadow: 0 2px 8px rgba(106,27,154,.30); }
+.nota-btn.selected-low { background: #e53935; border-color: #b71c1c; color: white; }
+.nota-btn.selected-mid { background: #fb8c00; border-color: #e65100; color: white; }
+.nota-btn.selected-high { background: #2e7d32; border-color: #1b5e20; color: white; }
+.nota-display { margin-top: 12px; font-size: 13px; color: #666; font-weight: 600; min-height: 20px; }
+/* ── RASCUNHO ── */
+#draftIndicator { font-size: 12px; color: #2e7d32; margin-top: 8px; opacity: 0; transition: opacity .4s; font-weight: 600; }
+#btnLimparRascunho { background: none; border: none; font-size: 12px; color: #aaa; cursor: pointer; text-decoration: underline; margin-top: 4px; }
+#btnLimparRascunho:hover { color: #e53935; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <img class="header-logo" src="https://palomamiranda-arch.github.io/nutrisaude-relatorio/logo.png" alt="NutriSaúde"
+      onerror="this.style.display='none';document.getElementById('logoFallback').style.display='flex'">
+    <div id="logoFallback" style="display:none;width:52px;height:52px;background:rgba(255,255,255,0.2);border-radius:50%;align-items:center;justify-content:center;font-size:24px;font-weight:900;flex-shrink:0;">N</div>
+    <div class="header-divider"></div>
+    <div class="header-text">
+      <h1>Checklist - Chefe de Cozinha</h1>
+      <p>NutriSaúde · Preencha todos os campos marcados com *</p>
+    </div>
+  </div>
+
+  <div class="form-body">
+    <p class="required-note">* Campos obrigatórios</p>
+
+    <form id="visitaForm">
+
+      <!-- IDENTIFICAÇÃO -->
+      <div class="section">
+        <div class="section-title">Identificação</div>
+
+        <div class="grid-1">
+          <div class="field">
+            <label>Unidade *</label>
+            <input type="text" id="f_unidade" list="dl-unidades" placeholder="Digite ou selecione a unidade" required autocomplete="off">
+          </div>
+        </div>
+        <datalist id="dl-unidades"></datalist>
+
+        <!-- Data início / fim -->
+        <div class="grid-3" style="margin-top:12px">
+          <div class="field">
+            <label>Data início *</label>
+            <input type="date" id="f_data_inicio" required>
+          </div>
+          <div class="date-sep">até</div>
+          <div class="field">
+            <label>Data fim *</label>
+            <input type="date" id="f_data_fim" required>
+          </div>
+        </div>
+
+        <!-- TURNO -->
+        <div class="field" style="margin-top:12px">
+          <label>Turno *</label>
+          <div class="turno-group">
+            <label class="turno-label">
+              <input type="radio" name="turno" value="Almoço" required>
+              <span class="turno-emoji">☀️</span> Almoço
+            </label>
+            <label class="turno-label">
+              <input type="radio" name="turno" value="Jantar">
+              <span class="turno-emoji">🌙</span> Jantar
+            </label>
+            <label class="turno-label">
+              <input type="radio" name="turno" value="Ceia">
+              <span class="turno-emoji">🌃</span> Ceia
+            </label>
+          </div>
+        </div>
+
+        <div class="grid-2" style="margin-top:12px">
+          <div class="field">
+            <label>Motivo da visita *</label>
+            <input type="text" id="f_motivo" placeholder="Ex: Visita de rotina" required>
+          </div>
+          <div class="field">
+            <label>Tipo de visita</label>
+            <div class="radio-group">
+              <label class="radio-label"><input type="radio" name="tipo" value="Operação"> Operação</label>
+              <label class="radio-label"><input type="radio" name="tipo" value="ADM"> ADM</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-2" style="margin-top:12px">
+          <div class="field">
+            <label>Chefe de Cozinha *</label>
+            <input type="text" id="f_chefe" list="dl-chefes" placeholder="Nome do chefe de cozinha" required autocomplete="off">
+          </div>
+          <datalist id="dl-chefes"></datalist>
+          <div class="field">
+            <label>Gestora</label>
+            <input type="text" id="f_gestora" placeholder="Nome da gestora">
+          </div>
+        </div>
+
+        <div class="grid-1" style="margin-top:12px">
+          <div class="field">
+            <label>Supervisão</label>
+            <input type="text" id="f_supervisao" list="dl-supervisores" placeholder="Nome da supervisão" autocomplete="off">
+          </div>
+          <datalist id="dl-supervisores"></datalist>
+        </div>
+      </div>
+
+      <!-- QUESTÕES -->
+      <div class="section">
+        <div class="section-title">Questões de Avaliação</div>
+        <table class="questions-table">
+          <thead>
+            <tr>
+              <th style="width:40%">Questão</th>
+              <th style="width:130px">Resposta</th>
+              <th>Observação</th>
+              <th style="width:64px;text-align:center">Foto</th>
+            </tr>
+          </thead>
+          <tbody id="questoesBody"></tbody>
+        </table>
+      </div>
+
+      <!-- NOTA DA UNIDADE -->
+      <div class="nota-section">
+        <h3>⭐ Nota da Unidade</h3>
+        <p class="subtitle">Dê uma nota geral de 0 a 10 para a unidade visitada.</p>
+        <div class="nota-btns" id="notaBtns"></div>
+        <p class="nota-display" id="notaDisplay">Nenhuma nota selecionada</p>
+      </div>
+
+      <!-- RELATÓRIO GERAL COM GRAVAÇÃO -->
+      <div class="audio-section">
+        <h3>📋 Relatório Geral da Visita</h3>
+        <p class="subtitle">Digite suas anotações ou use o botão de gravação — a fala será transcrita automaticamente.</p>
+        <div class="mic-row">
+          <button type="button" id="micBtn" onclick="toggleRecording()">🎤 Iniciar Gravação</button>
+          <span class="rec-indicator" id="recIndicator"><span class="rec-dot"></span> Gravando…</span>
+        </div>
+        <div id="interimBox"></div>
+        <textarea id="relatorioText" placeholder="Anotar detalhes da visita realizada… (ou use o botão acima para gravar por voz)"></textarea>
+        <p class="mic-tip">💡 A gravação por voz funciona melhor no <strong>Google Chrome</strong>. Fale pausadamente para maior precisão.</p>
+      </div>
+
+      <!-- EVIDÊNCIAS FOTOGRÁFICAS -->
+      <div class="foto-section">
+        <h3>📸 Evidências Fotográficas</h3>
+        <p class="subtitle">Adicione fotos da galeria ou tire uma foto na hora. Máximo 8 fotos.</p>
+        <input type="file" id="fotoGaleriaInput" accept="image/*" multiple style="display:none">
+        <input type="file" id="fotoCameraInput" accept="image/*" capture="environment" style="display:none">
+        <div class="foto-btns">
+          <button type="button" class="foto-btn foto-btn-galeria" onclick="document.getElementById('fotoGaleriaInput').click()">
+            📁 Da Galeria
+          </button>
+          <button type="button" class="foto-btn foto-btn-camera" onclick="document.getElementById('fotoCameraInput').click()">
+            📷 Tirar Foto
+          </button>
+        </div>
+        <p class="foto-upload-hint">As fotos serão incluídas diretamente no PDF do relatório</p>
+        <div class="foto-preview" id="fotoPreview"></div>
+        <p class="foto-count" id="fotoCount"></p>
+      </div>
+
+      <!-- ENVIAR -->
+      <div class="submit-section">
+        <button type="submit" id="btnSubmit">✉️ Enviar Relatório</button>
+        <p class="send-note">O relatório será enviado para paloma.miranda@nutrisaude.com.br</p>
+        <div id="draftIndicator">💾 Rascunho salvo</div>
+        <button type="button" id="btnLimparRascunho" onclick="confirmarLimparRascunho()">🗑 Limpar rascunho</button>
+      </div>
+
+    </form>
+
+    <!-- TELA DE SUCESSO -->
+    <div id="successScreen">
+      <div class="big-check">✅</div>
+      <h2>Relatório enviado!</h2>
+      <p>O relatório foi enviado com sucesso para<br><strong>paloma.miranda@nutrisaude.com.br</strong></p>
+      <button id="btnNewReport" onclick="resetForm()">📋 Novo Relatório</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ── CONFIGURAÇÃO ──
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwhqbNfWGAbJ243pBR96_7sy7S1HzcpqWK189eNmRxMg39-3869GE1dQVvdXMKiDO4_/exec';
+const MAX_FOTOS = 8;
+
+// ── QUESTÕES ──
+const questoes = [
+  "Está sendo seguido padrões da empresa no geral? (como receita padrão, decorações, temperos, etc)",
+  "Receitas realizadas estão de acordo com as receitas padrão do app e Teknisa? Se não, quais?",
+  "Conferido e validado versão do Receituário Padrão atual.",
+  "Conferido e validado versão do POP de higiene dos equipamentos atual.",
+  "Acessórios suficientes?",
+  "Equipamentos em bom estado de uso?",
+  "Os utensílios estão em boas condições?",
+  "A unidade possui os insumos necessários?",
+  "O líder da produção tem domínio dos processos?",
+  "O cardápio semanal está correto e disponível?",
+  "A equipe está completa e atende a demanda na unidade? Houve problemas?",
+  "A gestora demonstra domínio da unidade, produção, equipe e clientes?",
+  "Você foi bem recebido na unidade? Comente.",
+  "Anexar foto da rampa montada por você.",
+  "Principal desafios da visita."
+];
+const NUM_QUESTOES = questoes.length;
+
+// ── FOTOS POR QUESTÃO ──
+let fotosQuestoes = new Array(NUM_QUESTOES).fill(null);
+
+function renderizarFotoQuestao(n) {
+  const container = document.getElementById(`fotoq${n}`);
+  if (!container) return;
+  if (fotosQuestoes[n-1]) {
+    const f = fotosQuestoes[n-1];
+    container.innerHTML = `<div class="fotoq-thumb">
+      <img src="data:${f.tipo};base64,${f.base64}" alt="Foto Q${n}">
+      <button type="button" class="fotoq-rm" onclick="removerFotoQuestao(${n})">×</button>
+    </div>`;
+  } else {
+    container.innerHTML = `<label class="fotoq-btn" title="Adicionar foto da questão ${n}">
+      <input type="file" accept="image/*" capture="environment" style="display:none"
+        onchange="selecionarFotoQuestao(${n}, this.files[0]); this.value='';">📷
+    </label>`;
+  }
+}
+
+function selecionarFotoQuestao(n, file) {
+  if (!file) return;
+  comprimirImagem(file, 1200, 0.78).then(foto => {
+    fotosQuestoes[n-1] = foto;
+    renderizarFotoQuestao(n);
+    salvarRascunho();
+  });
+}
+
+function removerFotoQuestao(n) {
+  fotosQuestoes[n-1] = null;
+  renderizarFotoQuestao(n);
+  salvarRascunho();
+}
+
+const tbody = document.getElementById('questoesBody');
+questoes.forEach((q, i) => {
+  const n = i + 1;
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td><div class="q-cell"><span class="q-num">${n}</span><span>${q}</span></div></td>
+    <td><div class="sim-nao">
+      <label><input type="radio" name="q${n}" value="SIM"> SIM</label>
+      <label><input type="radio" name="q${n}" value="NÃO"> NÃO</label>
+      <label><input type="radio" name="q${n}" value="N/A"> N/A</label>
+    </div></td>
+    <td><input type="text" class="obs-input" id="obs${n}" placeholder="Observação…"></td>
+    <td style="text-align:center;vertical-align:middle"><div id="fotoq${n}" class="fotoq-cell"></div></td>`;
+  tbody.appendChild(tr);
+  renderizarFotoQuestao(n);
+});
+
+// Datas padrão: hoje em ambos
+const hoje = new Date().toISOString().split('T')[0];
+document.getElementById('f_data_inicio').value = hoje;
+document.getElementById('f_data_fim').value = hoje;
+
+// Sincronizar: data fim nunca menor que data início
+document.getElementById('f_data_inicio').addEventListener('change', function() {
+  const fim = document.getElementById('f_data_fim');
+  if (fim.value && fim.value < this.value) fim.value = this.value;
+  fim.min = this.value;
+});
+
+// ── AUTOCOMPLETE ──
+const preencherDatalist = (id, itens) => {
+  const dl = document.getElementById(id);
+  dl.innerHTML = '';
+  (itens || []).forEach(item => {
+    const opt = document.createElement('option');
+    opt.value = item;
+    dl.appendChild(opt);
+  });
+};
+
+async function carregarListas() {
+  try {
+    const resp = await fetch(APPS_SCRIPT_URL);
+    const data = await resp.json();
+    preencherDatalist('dl-unidades', data.unidades || []);
+    preencherDatalist('dl-chefes', data.chefes || []);
+    preencherDatalist('dl-supervisores', data.supervisores || []);
+  } catch(e) {
+    console.warn('Não foi possível carregar as listas:', e);
+  }
+}
+carregarListas();
+
+// ── RASCUNHO AUTOMÁTICO (localStorage) ──
+const RASCUNHO_KEY = 'nutrisaude_rascunho_chefe_cozinha';
+
+function salvarRascunho() {
+  try {
+    const dados = {
+      unidade: document.getElementById('f_unidade').value,
+      dataInicio: document.getElementById('f_data_inicio').value,
+      dataFim: document.getElementById('f_data_fim').value,
+      turno: (document.querySelector('input[name="turno"]:checked') || {}).value || '',
+      nota: notaSelecionada !== null ? notaSelecionada : '',
+      motivo: document.getElementById('f_motivo').value,
+      tipo: (document.querySelector('input[name="tipo"]:checked') || {}).value || '',
+      chefe: document.getElementById('f_chefe').value,
+      gestora: document.getElementById('f_gestora').value,
+      supervisao: document.getElementById('f_supervisao').value,
+      relatorio: document.getElementById('relatorioText').value,
+      questoes: []
+    };
+    for (let i = 1; i <= NUM_QUESTOES; i++) {
+      dados.questoes.push({
+        resposta: (document.querySelector(`input[name="q${i}"]:checked`) || {}).value || '',
+        obs: (document.getElementById(`obs${i}`) || {}).value || ''
+      });
+    }
+    localStorage.setItem(RASCUNHO_KEY, JSON.stringify(dados));
+    try {
+      localStorage.setItem(RASCUNHO_KEY + '_fotos', JSON.stringify(fotosCarregadas));
+    } catch(quota) {
+      localStorage.removeItem(RASCUNHO_KEY + '_fotos');
+    }
+    try {
+      localStorage.setItem(RASCUNHO_KEY + '_fotosq', JSON.stringify(fotosQuestoes));
+    } catch(quota) {
+      localStorage.removeItem(RASCUNHO_KEY + '_fotosq');
+    }
+    mostrarIndicador('💾 Rascunho salvo', false);
+  } catch(e) {
+    console.warn('Não foi possível salvar rascunho:', e);
+  }
+}
+
+function mostrarIndicador(texto, permanente) {
+  const el = document.getElementById('draftIndicator');
+  if (!el) return;
+  el.textContent = texto;
+  el.style.opacity = '1';
+  if (!permanente) {
+    clearTimeout(el._timeout);
+    el._timeout = setTimeout(() => { el.style.opacity = '0'; }, 3000);
+  }
+}
+
+function restaurarRascunho() {
+  try {
+    const raw = localStorage.getItem(RASCUNHO_KEY);
+    if (!raw) return;
+    const d = JSON.parse(raw);
+    if (!d.unidade && !d.chefe && !d.relatorio) return;
+    if (d.unidade) document.getElementById('f_unidade').value = d.unidade;
+    if (d.dataInicio) document.getElementById('f_data_inicio').value = d.dataInicio;
+    if (d.dataFim) document.getElementById('f_data_fim').value = d.dataFim;
+    if (d.turno) { const r = document.querySelector(`input[name="turno"][value="${d.turno}"]`); if (r) r.checked = true; }
+    if (d.nota !== '' && d.nota !== undefined && d.nota !== null) {
+      const btnNota = document.querySelector(`.nota-btn[data-nota="${d.nota}"]`);
+      if (btnNota) btnNota.click();
+    }
+    if (d.motivo) document.getElementById('f_motivo').value = d.motivo;
+    if (d.tipo) { const r = document.querySelector(`input[name="tipo"][value="${d.tipo}"]`); if (r) r.checked = true; }
+    if (d.chefe) document.getElementById('f_chefe').value = d.chefe;
+    if (d.gestora) document.getElementById('f_gestora').value = d.gestora;
+    if (d.supervisao) document.getElementById('f_supervisao').value = d.supervisao;
+    if (d.relatorio) document.getElementById('relatorioText').value = d.relatorio;
+    if (d.questoes) {
+      d.questoes.forEach((q, i) => {
+        const n = i + 1;
+        if (q.resposta) { const r = document.querySelector(`input[name="q${n}"][value="${q.resposta}"]`); if (r) r.checked = true; }
+        const obs = document.getElementById(`obs${n}`);
+        if (obs && q.obs) obs.value = q.obs;
+      });
+    }
+    try {
+      const fotosRaw = localStorage.getItem(RASCUNHO_KEY + '_fotos');
+      if (fotosRaw) { fotosCarregadas = JSON.parse(fotosRaw); renderizarFotos(); }
+    } catch(e) {}
+    try {
+      const fotosqRaw = localStorage.getItem(RASCUNHO_KEY + '_fotosq');
+      if (fotosqRaw) {
+        fotosQuestoes = JSON.parse(fotosqRaw);
+        for (let n = 1; n <= NUM_QUESTOES; n++) renderizarFotoQuestao(n);
+      }
+    } catch(e) {}
+    mostrarIndicador('📂 Rascunho restaurado — continue de onde parou!', true);
+    setTimeout(() => {
+      const el = document.getElementById('draftIndicator');
+      if (el) el.style.opacity = '0';
+    }, 5000);
+  } catch(e) {
+    console.warn('Não foi possível restaurar rascunho:', e);
+  }
+}
+
+function limparRascunho() {
+  localStorage.removeItem(RASCUNHO_KEY);
+  localStorage.removeItem(RASCUNHO_KEY + '_fotos');
+  localStorage.removeItem(RASCUNHO_KEY + '_fotosq');
+  const el = document.getElementById('draftIndicator');
+  if (el) el.style.opacity = '0';
+}
+
+function confirmarLimparRascunho() {
+  if (confirm('Deseja apagar o rascunho salvo e limpar o formulário?')) {
+    limparRascunho();
+    resetForm();
+  }
+}
+
+// Auto-salvar 1 segundo após qualquer mudança no formulário
+let _saveTimeout;
+document.getElementById('visitaForm').addEventListener('input', () => { clearTimeout(_saveTimeout); _saveTimeout = setTimeout(salvarRascunho, 1000); });
+document.getElementById('visitaForm').addEventListener('change', () => { clearTimeout(_saveTimeout); _saveTimeout = setTimeout(salvarRascunho, 1000); });
+
+// ── FOTOS ──
+let fotosCarregadas = [];
+
+function adicionarFotos(files) {
+  const restantes = MAX_FOTOS - fotosCarregadas.length;
+  if (restantes <= 0) { alert(`Máximo de ${MAX_FOTOS} fotos atingido.`); return; }
+  const lista = Array.from(files).slice(0, restantes);
+  if (Array.from(files).length > restantes) alert(`Apenas ${restantes} foto(s) adicionada(s) (limite ${MAX_FOTOS}).`);
+  Promise.all(lista.map(f => comprimirImagem(f))).then(resultados => {
+    fotosCarregadas.push(...resultados);
+    renderizarFotos();
+    salvarRascunho();
+  });
+}
+
+document.getElementById('fotoGaleriaInput').addEventListener('change', function(e) {
+  adicionarFotos(e.target.files);
+  this.value = '';
+});
+document.getElementById('fotoCameraInput').addEventListener('change', function(e) {
+  adicionarFotos(e.target.files);
+  this.value = '';
+});
+
+function comprimirImagem(file, maxWidth = 1400, quality = 0.78) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = reject;
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onerror = reject;
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        let { width, height } = img;
+        if (width > maxWidth) { height = Math.round((height * maxWidth) / width); width = maxWidth; }
+        canvas.width = width; canvas.height = height;
+        canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+        const mimeType = file.type === 'image/png' ? 'image/png' : 'image/jpeg';
+        const dataUrl = canvas.toDataURL(mimeType, quality);
+        resolve({ nome: file.name, base64: dataUrl.split(',')[1], tipo: mimeType });
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function renderizarFotos() {
+  const preview = document.getElementById('fotoPreview');
+  preview.innerHTML = '';
+  fotosCarregadas.forEach((foto, idx) => {
+    const item = document.createElement('div');
+    item.className = 'foto-item';
+    item.innerHTML = `
+      <img src="data:${foto.tipo};base64,${foto.base64}" alt="Foto ${idx+1}">
+      <button type="button" class="foto-remove" onclick="removerFoto(${idx})">×</button>`;
+    preview.appendChild(item);
+  });
+  document.getElementById('fotoCount').textContent =
+    fotosCarregadas.length > 0 ? `${fotosCarregadas.length} foto(s) selecionada(s)` : '';
+}
+
+function removerFoto(idx) { fotosCarregadas.splice(idx, 1); renderizarFotos(); salvarRascunho(); }
+
+// Restaurar rascunho aqui — fotosCarregadas e renderizarFotos já existem
+restaurarRascunho();
+
+// ── GRAVAÇÃO DE VOZ ──
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+let recognition = null, isRecording = false;
+if (!SR) {
+  document.getElementById('micBtn').style.display = 'none';
+} else {
+  recognition = new SR();
+  recognition.lang = 'pt-BR';
+  recognition.continuous = false;
+  recognition.interimResults = true;
+  recognition.onresult = (e) => {
+    let interim = '', finalText = '';
+    for (let i = 0; i < e.results.length; i++) {
+      if (e.results[i].isFinal) finalText += e.results[i][0].transcript;
+      else interim += e.results[i][0].transcript;
+    }
+    if (finalText) {
+      const box = document.getElementById('relatorioText');
+      box.value = (box.value ? box.value.trimEnd() + ' ' : '') + finalText.trim();
+    }
+    document.getElementById('interimBox').textContent = interim ? '…' + interim : '';
+  };
+  recognition.onerror = (e) => {
+    if (e.error !== 'no-speech') stopRecording();
+    if (e.error === 'not-allowed') alert('Permissão de microfone negada.');
+  };
+  recognition.onend = () => {
+    document.getElementById('interimBox').textContent = '';
+    if (isRecording) setTimeout(() => { if (isRecording) try { recognition.start(); } catch(e) {} }, 300);
+  };
+}
+
+function toggleRecording() { if (!SR) return; isRecording ? stopRecording() : startRecording(); }
+function startRecording() {
+  try {
+    recognition.start(); isRecording = true;
+    const btn = document.getElementById('micBtn');
+    btn.textContent = '⏹ Parar Gravação'; btn.className = 'recording';
+    document.getElementById('recIndicator').style.display = 'flex';
+  } catch(e) {}
+}
+function stopRecording() {
+  isRecording = false;
+  try { recognition.stop(); } catch(e) {}
+  const btn = document.getElementById('micBtn');
+  btn.textContent = '🎤 Iniciar Gravação'; btn.className = '';
+  document.getElementById('recIndicator').style.display = 'none';
+  document.getElementById('interimBox').textContent = '';
+}
+
+// ── NOTA DA UNIDADE ──
+let notaSelecionada = null;
+const notaBtnsContainer = document.getElementById('notaBtns');
+for (let i = 0; i <= 10; i++) {
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'nota-btn';
+  btn.textContent = i;
+  btn.dataset.nota = i;
+  btn.addEventListener('click', () => {
+    notaSelecionada = i;
+    document.querySelectorAll('.nota-btn').forEach(b => {
+      b.classList.remove('selected', 'selected-low', 'selected-mid', 'selected-high');
+    });
+    const cls = i <= 4 ? 'selected-low' : i <= 6 ? 'selected-mid' : 'selected-high';
+    btn.classList.add('selected', cls);
+    const labels = ['😟 Muito ruim','😟 Muito ruim','😕 Ruim','😕 Ruim','😐 Regular','😐 Regular','🙂 Razoável','🙂 Razoável','😊 Bom','😊 Bom','🌟 Excelente'];
+    document.getElementById('notaDisplay').textContent = `Nota: ${i}/10 — ${labels[i]}`;
+    salvarRascunho();
+  });
+  notaBtnsContainer.appendChild(btn);
+}
+
+// ── ENVIO ──
+document.getElementById('visitaForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+
+  const unidade = document.getElementById('f_unidade').value.trim();
+  const dataInicio = document.getElementById('f_data_inicio').value;
+  const dataFim = document.getElementById('f_data_fim').value;
+  const turno = (document.querySelector('input[name="turno"]:checked') || {}).value || '';
+  const motivo = document.getElementById('f_motivo').value.trim();
+  const tipo = (document.querySelector('input[name="tipo"]:checked') || {}).value || '';
+  const chefe = document.getElementById('f_chefe').value.trim();
+  const gestora = document.getElementById('f_gestora').value.trim();
+  const supervisao = document.getElementById('f_supervisao').value.trim();
+
+  const questoesResp = [];
+  for (let i = 1; i <= NUM_QUESTOES; i++) {
+    const resp = (document.querySelector(`input[name="q${i}"]:checked`) || {}).value || '';
+    const obs = (document.getElementById(`obs${i}`) || {}).value || '';
+    const foto = fotosQuestoes[i-1] || null;
+    questoesResp.push({ resposta: resp, observacao: obs, foto });
+  }
+
+  const relatorio = document.getElementById('relatorioText').value.trim();
+
+  if (!unidade || !chefe) {
+    alert('Preencha os campos obrigatórios: Unidade e Chefe de Cozinha.');
+    return;
+  }
+  if (!turno) {
+    alert('Selecione o turno da visita (Almoço, Jantar ou Ceia).');
+    return;
+  }
+
+  const btn = document.getElementById('btnSubmit');
+  btn.disabled = true;
+  btn.textContent = '⏳ Enviando…';
+
+  function fmtBR(d) {
+    if (!d) return '';
+    const [y, m, dia] = d.split('-');
+    return `${dia}/${m}/${y}`;
+  }
+
+  const payload = {
+    tipo_formulario: 'chefe_cozinha',
+    unidade,
+    data_inicio_br: fmtBR(dataInicio),
+    data_fim_br: fmtBR(dataFim),
+    turno,
+    nota: notaSelecionada !== null ? notaSelecionada : '',
+    motivo, tipo, chefe, gestora, supervisao,
+    questoes: questoesResp,
+    relatorio,
+    fotos: fotosCarregadas
+  };
+
+  try {
+    await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify(payload)
+    });
+    limparRascunho();
+    document.getElementById('visitaForm').style.display = 'none';
+    document.getElementById('successScreen').style.display = 'flex';
+  } catch (err) {
+    alert('Erro ao enviar: ' + err.message);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '✉️ Enviar Relatório';
+  }
+});
+
+function resetForm() {
+  limparRascunho();
+  document.getElementById('visitaForm').reset();
+  notaSelecionada = null;
+  document.querySelectorAll('.nota-btn').forEach(b => b.classList.remove('selected','selected-low','selected-mid','selected-high'));
+  document.getElementById('notaDisplay').textContent = 'Nenhuma nota selecionada';
+  fotosCarregadas = [];
+  renderizarFotos();
+  fotosQuestoes = new Array(NUM_QUESTOES).fill(null);
+  for (let n = 1; n <= NUM_QUESTOES; n++) renderizarFotoQuestao(n);
+  document.getElementById('relatorioText').value = '';
+  const hoje = new Date().toISOString().split('T')[0];
+  document.getElementById('f_data_inicio').value = hoje;
+  document.getElementById('f_data_fim').value = hoje;
+  document.getElementById('visitaForm').style.display = 'block';
+  document.getElementById('successScreen').style.display = 'none';
+}
+</script>
+</body>
+</html>
